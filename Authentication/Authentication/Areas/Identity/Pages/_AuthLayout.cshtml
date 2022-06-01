@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card login-logout-tab">
+            <div class="card-header">
+                <ul class="nav nav-pills nav-fill">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Identity/Account/Login">Giriş Yap</a>
+                        
+                        <br />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/Identity/Account/Register">Kayıt Ol</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(function() {
+            var current = location.pathname;
+            $('.nav-tabs li a').each(funtion(){
+                var $this = $(this);
+                if(current.indexOf($this.attr('href')) !== -1){
+                $this.addClass('active');
+            }
+        })
+                                                        })
+    </script>
+}

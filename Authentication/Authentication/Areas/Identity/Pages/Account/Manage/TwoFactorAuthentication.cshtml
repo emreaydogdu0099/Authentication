@@ -1,0 +1,60 @@
+﻿@page
+@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "2 Faktörlü Kimlik Doğrulama";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h4>@ViewData["Title"]</h4>
+@if (Model.Is2faEnabled)
+{
+    if (Model.RecoveryCodesLeft == 0)
+    {
+        <div class="alert alert-danger">
+            <strong>Kurtarma kodunuz kalmadı.</strong>
+            <p>Kurtarma koduyla oturum açmadan önce, yeni bir kurtarma kodu seti <a asp-page="./GenerateRecoveryCodes"> </a> oluşturmalısınız.</p>
+        </div>
+    }
+    else if (Model.RecoveryCodesLeft == 1)
+    {
+        <div class="alert alert-danger">
+            <strong>1 kurtarma kodunuz kaldı.</strong>
+            <p>Yeni bir kurtarma kodu seti <a asp-page="./GenerateRecoveryCodes">oluşturabilirsiniz</a>.</p>
+        </div>
+    }
+    else if (Model.RecoveryCodesLeft <= 3)
+    {
+        <div class="alert alert-warning">
+            <strong>@Model.RecoveryCodesLeft kurtarma kodlarınız kaldı.</strong>
+            <p>Yeni bir kurtarma kodu seti <a asp-page="./GenerateRecoveryCodes">oluşturmalısınız</a>.</p>
+        </div>
+    }
+
+    if (Model.IsMachineRemembered)
+    {
+        <form method="post" style="display: inline-block">
+            <button type="submit" class="btn btn-default">Bu tarayıcıyı unut</button>
+        </form>
+    }
+    <a asp-page="./Disable2fa" class="btn btn-primary">2 faktörlü kimlik doğrulamayı devre dışı bırak.</a>
+    @*<a asp-page="./GenerateRecoveryCodes" class="btn btn-secondary">Kurtarma kodlarını sıfırla</a>*@
+}
+<br />
+<br />
+<h5>Kimlik doğrulayıcı uygulaması</h5>
+<br />
+<br />
+@if (!Model.HasAuthenticator)
+{
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-success">Kimlik doğrulama uygulaması ekle</a>
+}
+else
+{
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-success">Kimlik doğrulama uygulamasını kurun</a>
+    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-warning">Kimlik doğrulama uygulamasını sıfırla</a>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
